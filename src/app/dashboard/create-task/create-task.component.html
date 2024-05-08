@@ -12,16 +12,26 @@
         >
           <div class="input-box">
             <label>Title*</label>
-            <input type="text" required name="title" ngModel />
+            <input type="text" required name="title" [(ngModel)]="title" />
           </div>
           <div class="input-box">
             <label>Description*</label>
-            <textarea rows="8" name="description" required ngModel></textarea>
+            <textarea
+              rows="8"
+              name="description"
+              required
+              [(ngModel)]="desc"
+            ></textarea>
           </div>
           <div class="column">
             <div class="input-box">
               <label>Assigned To</label>
-              <input type="text" name="assignedTo" required ngModel />
+              <input
+                type="text"
+                name="assignedTo"
+                required
+                [(ngModel)]="assignedTo"
+              />
             </div>
             <div class="input-box">
               <label>Created At</label>
@@ -31,7 +41,7 @@
           <div class="input-box address">
             <div class="column">
               <div class="select-box">
-                <select name="priority" ngModel>
+                <select name="priority" [(ngModel)]="status">
                   <option hidden>Priority</option>
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -40,7 +50,7 @@
                 </select>
               </div>
               <div class="select-box">
-                <select name="status" ngModel>
+                <select name="status" [(ngModel)]="priority">
                   <option hidden>Status</option>
                   <option value="open">Open</option>
                   <option value="started">Started</option>

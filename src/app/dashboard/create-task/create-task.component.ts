@@ -8,6 +8,11 @@ import { Task } from 'src/app/Model/task';
   styleUrls: ['./create-task.component.css'],
 })
 export class CreateTaskComponent {
+  title: string = 'Task 1';
+  desc: string = 'create home page';
+  priority: string = 'medium';
+  status: string = 'open';
+  assignedTo: string = 'Vishwas';
   @Output()
   CloseForm: EventEmitter<boolean> = new EventEmitter<boolean>();
 

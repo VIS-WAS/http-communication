@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Task } from '../Model/task';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +9,7 @@ import { Task } from '../Model/task';
 })
 export class DashboardComponent {
   showCreateTaskForm: boolean = false;
+  http: HttpClient = inject(HttpClient);
 
   OpenCreateTaskForm() {
     this.showCreateTaskForm = true;
@@ -17,6 +19,15 @@ export class DashboardComponent {
     this.showCreateTaskForm = false;
   }
   createTask(data: Task) {
-    console.log(data);
+    const headers = new HttpHeaders({ myheader: 'hello-world' });
+    this.http
+      .post<{ name: string }>(
+        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json',
+        data,
+        { headers: headers }
+      )
+      .subscribe((response) => {
+        console.log(response);
+      });
   }
 }
