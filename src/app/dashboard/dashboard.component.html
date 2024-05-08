@@ -1,6 +1,7 @@
 <app-create-task
   *ngIf="showCreateTaskForm"
   (CloseForm)="CloseCreateTaskForm()"
+  (EmitTaskData)="createTask($event)"
 ></app-create-task>
 
 <div class="dashboard-container">
@@ -12,8 +13,8 @@
       <button class="create-task-btn" (click)="OpenCreateTaskForm()">
         Create Task
       </button>
-      <button class="create-task-btn">Fetch Tasks</button>
-      <button class="create-task-btn">Clear Tasks</button>
+      <!-- <button class="create-task-btn">Fetch Tasks</button>
+      <button class="create-task-btn">Clear Tasks</button> -->
     </div>
   </div>
 
