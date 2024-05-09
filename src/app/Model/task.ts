@@ -5,6 +5,7 @@ export class Task {
     public assignedTo: string,
     public createdAt: string,
     public priority: string,
-    public status: string
+    public status: string,
+    public id?: string
   ) {}
 }
