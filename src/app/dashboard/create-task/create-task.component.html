@@ -1,6 +1,6 @@
 <div class="overlay">
   <div class="popup">
-    <h2>'Create a new Task</h2>
+    <h2>{{ isEditMode ? "Update Task" : "Create New Task" }}</h2>
     <a class="close" href="#" (click)="OnCloseForm()">&times;</a>
     <div class="content">
       <section class="container">
@@ -12,26 +12,16 @@
         >
           <div class="input-box">
             <label>Title*</label>
-            <input type="text" required name="title" [(ngModel)]="title" />
+            <input type="text" required name="title" ngModel />
           </div>
           <div class="input-box">
             <label>Description*</label>
-            <textarea
-              rows="8"
-              name="description"
-              required
-              [(ngModel)]="desc"
-            ></textarea>
+            <textarea rows="8" name="description" required ngModel></textarea>
           </div>
           <div class="column">
             <div class="input-box">
               <label>Assigned To</label>
-              <input
-                type="text"
-                name="assignedTo"
-                required
-                [(ngModel)]="assignedTo"
-              />
+              <input type="text" name="assignedTo" required ngModel />
             </div>
             <div class="input-box">
               <label>Created At</label>
@@ -41,7 +31,7 @@
           <div class="input-box address">
             <div class="column">
               <div class="select-box">
-                <select name="priority" [(ngModel)]="status">
+                <select name="priority" ngModel>
                   <option hidden>Priority</option>
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -50,7 +40,7 @@
                 </select>
               </div>
               <div class="select-box">
-                <select name="status" [(ngModel)]="priority">
+                <select name="status" ngModel>
                   <option hidden>Status</option>
                   <option value="open">Open</option>
                   <option value="started">Started</option>
@@ -60,7 +50,9 @@
               </div>
             </div>
           </div>
-          <button type="submit">Create Task</button>
+          <button type="submit">
+            {{ isEditMode ? "Update Task" : "Create Task" }}
+          </button>
         </form>
       </section>
     </div>

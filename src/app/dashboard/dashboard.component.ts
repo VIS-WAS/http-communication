@@ -10,19 +10,30 @@ import { TaskService } from '../Services/task.service';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  editMode: boolean = false;
+
   showCreateTaskForm: boolean = false;
   http: HttpClient = inject(HttpClient);
 
   allTasks: Task[] = [];
 
   taskService: TaskService = inject(TaskService);
-
+  selectedTask: Task;
   ngOnInit() {
     this.fetchAllTasks();
   }
 
   OpenCreateTaskForm() {
     this.showCreateTaskForm = true;
+    this.editMode = false;
+    this.selectedTask = {
+      title: '',
+      desc: '',
+      assignedTo: '',
+      createdAt: '',
+      priority: '',
+      status: '',
+    };
   }
 
   CloseCreateTaskForm() {
@@ -48,5 +59,13 @@ export class DashboardComponent implements OnInit {
 
   deleteAllTeask() {
     this.taskService.deleteAllTasks();
+  }
+  editTask(id: string | undefined) {
+    this.showCreateTaskForm = true;
+    this.editMode = true;
+
+    this.selectedTask = this.allTasks.find((task) => {
+      return task.id === id;
+    });
   }
 }

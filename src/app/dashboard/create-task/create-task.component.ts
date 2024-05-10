@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { NgFor } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Task } from 'src/app/Model/task';
 
@@ -7,18 +15,31 @@ import { Task } from 'src/app/Model/task';
   templateUrl: './create-task.component.html',
   styleUrls: ['./create-task.component.css'],
 })
-export class CreateTaskComponent {
-  title: string = 'Task 1';
-  desc: string = 'create home page';
-  priority: string = 'medium';
-  status: string = 'open';
-  assignedTo: string = 'Vishwas';
+export class CreateTaskComponent implements AfterViewInit {
+  // title: string = 'Task 1';
+  @Input()
+  isEditMode: boolean = false;
+
+  @Input()
+  selectedTask: Task;
+
+  @ViewChild('taskForm') taskForm: NgForm;
+
+  // desc: string = '';
+  // priority: string = 'medium';
+  // status: string = 'open';
+  // assignedTo: string = 'Vishwas';
   @Output()
   CloseForm: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Output()
   EmitTaskData: EventEmitter<Task> = new EventEmitter<Task>();
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.taskForm.form.patchValue(this.selectedTask);
+    }, 0);
+  }
   OnCloseForm() {
     this.CloseForm.emit(false);
   }
