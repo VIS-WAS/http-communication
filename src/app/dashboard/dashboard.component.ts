@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Task } from '../Model/task';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs';
+import { TaskService } from '../Services/task.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,8 @@ export class DashboardComponent implements OnInit {
   http: HttpClient = inject(HttpClient);
 
   allTasks: Task[] = [];
+
+  taskService: TaskService = inject(TaskService);
 
   ngOnInit() {
     this.fetchAllTasks();
@@ -26,83 +29,24 @@ export class DashboardComponent implements OnInit {
     this.showCreateTaskForm = false;
   }
   createTask(data: Task) {
-    const headers = new HttpHeaders({ myheader: 'hello-world' });
-    this.http
-      .post<{ name: string }>(
-        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json',
-        data,
-        { headers: headers }
-      )
-      .subscribe((response) => {
-        this.fetchAllTasks(); //------to fetch directly after form is submitted. This is move to below fucntion
-      });
+    this.taskService.CreateTask(data);
   }
   fetchAllTask() {
     this.fetchAllTasks();
   }
   private fetchAllTasks() {
-    this.http
-      .get<{ [key: string]: Task }>(
-        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json'
-      )
-      .pipe(
-        map((response) => {
-          //TRANSFORM DATA
-
-          let tasks = [];
-          for (let key in response) {
-            if (response.hasOwnProperty(key)) {
-              // to make sure only actual property is going to add
-              tasks.push({ ...response[key], id: key });
-            }
-          }
-
-          return tasks;
-        })
-      )
-      .subscribe({
-        next: (tasks) => {
-          this.allTasks = tasks;
-        },
-      });
+    // here you can subscribe to the observable with emit from getAllTasks() method
+    this.taskService.getAllTasks().subscribe({
+      next: (tasks) => {
+        this.allTasks = tasks;
+      },
+    });
   }
   deleteTask(id: string | undefined) {
-    this.http
-      .delete(
-        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks/' +
-          id +
-          '.json'
-      )
-      .subscribe({
-        next: (response) => {
-          this.fetchAllTasks();
-        },
-        error(err: any) {
-          alert(err.message);
-        },
-        // complete() {
-        //   alert(
-        //     'All records are deleted...! Please click on FetchTask button to see updated Tasks List'
-        //   );
-
-        // },
-      });
+    this.taskService.deleteTask(id);
   }
 
   deleteAllTeask() {
-    this.http
-      .delete(
-        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json'
-      )
-      .subscribe({
-        next: (response) => {
-          this.fetchAllTasks();
-        },
-        complete() {
-          alert(
-            'All records are deleted...! Please click on FetchTask button to see updated Tasks List'
-          );
-        },
-      });
+    this.taskService.deleteAllTasks();
   }
 }
