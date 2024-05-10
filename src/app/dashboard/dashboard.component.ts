@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
         { headers: headers }
       )
       .subscribe((response) => {
-        // this.fetchAllTasks();   //------to fetch directly after form is submitted. This is move to below fucntion
+        this.fetchAllTasks(); //------to fetch directly after form is submitted. This is move to below fucntion
       });
   }
   fetchAllTask() {
@@ -60,8 +60,49 @@ export class DashboardComponent implements OnInit {
           return tasks;
         })
       )
-      .subscribe((tasks) => {
-        this.allTasks = tasks;
+      .subscribe({
+        next: (tasks) => {
+          this.allTasks = tasks;
+        },
+      });
+  }
+  deleteTask(id: string | undefined) {
+    this.http
+      .delete(
+        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks/' +
+          id +
+          '.json'
+      )
+      .subscribe({
+        next: (response) => {
+          this.fetchAllTasks();
+        },
+        error(err: any) {
+          alert(err.message);
+        },
+        // complete() {
+        //   alert(
+        //     'All records are deleted...! Please click on FetchTask button to see updated Tasks List'
+        //   );
+
+        // },
+      });
+  }
+
+  deleteAllTeask() {
+    this.http
+      .delete(
+        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json'
+      )
+      .subscribe({
+        next: (response) => {
+          this.fetchAllTasks();
+        },
+        complete() {
+          alert(
+            'All records are deleted...! Please click on FetchTask button to see updated Tasks List'
+          );
+        },
       });
   }
 }

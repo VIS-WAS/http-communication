@@ -16,13 +16,18 @@
       <button class="create-task-btn" (click)="fetchAllTask()">
         Fetch Tasks
       </button>
-      <!--  <button class="create-task-btn">Clear Tasks</button> -->
+      <button class="create-task-btn" (click)="deleteAllTeask()">
+        Clear Tasks
+      </button>
     </div>
   </div>
 
   <hr />
 
   <div class="dashboard-item-container">
+    <div style="text-align: center" *ngIf="allTasks.length < 1">
+      <h2>No task has been created yet</h2>
+    </div>
     <div
       class="task-item"
       [ngClass]="'task-' + task.status"
@@ -41,7 +46,11 @@
         <button class="task-action-btn" title="Edit">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
         </button>
-        <button class="task-action-btn" title="Delete">
+        <button
+          class="task-action-btn"
+          title="Delete"
+          (click)="deleteTask(task.id)"
+        >
           <i class="fa fa-trash" aria-hidden="true"></i>
         </button>
       </div>
