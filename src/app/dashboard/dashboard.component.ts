@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   allTasks: Task[] = [];
 
   currentTaskId: string = '';
+  isLoading: boolean = false;
 
   taskService: TaskService = inject(TaskService);
   selectedTask: Task;
@@ -52,10 +53,12 @@ export class DashboardComponent implements OnInit {
     this.fetchAllTasks();
   }
   private fetchAllTasks() {
+    this.isLoading = true;
     // here you can subscribe to the observable with emit from getAllTasks() method
     this.taskService.getAllTasks().subscribe({
       next: (tasks) => {
         this.allTasks = tasks;
+        this.isLoading = false;
       },
     });
   }
