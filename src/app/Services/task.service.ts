@@ -5,7 +5,8 @@ import {
 } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Task } from '../Model/task';
-import { Subject, map } from 'rxjs';
+import { Subject, catchError, map, throwError } from 'rxjs';
+import { LoggingService } from './logging.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,13 +18,26 @@ export class TaskService {
 
   errorSubject = new Subject<HttpErrorResponse>();
 
+  loggingService: LoggingService = inject(LoggingService);
+
   CreateTask(task: Task) {
     const headers = new HttpHeaders({ myheader: 'hello-world' });
     this.http
       .post<{ name: string }>(
-        'https://angularhttpclient-dfddsd1cb37-default-rtdb.firebaseio.com/tasks.json',
+        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json',
         task,
         { headers: headers }
+      )
+      .pipe(
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+          this.loggingService.logError(errorObj);
+          return throwError(() => err);
+        })
       )
       .subscribe({
         error: (err) => {
@@ -38,6 +52,17 @@ export class TaskService {
         'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks/' +
           id +
           '.json'
+      )
+      .pipe(
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+          this.loggingService.logError(errorObj);
+          return throwError(() => err);
+        })
       )
       .subscribe({
         next: (response) => {},
@@ -56,6 +81,17 @@ export class TaskService {
     this.http
       .delete(
         'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json'
+      )
+      .pipe(
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+          this.loggingService.logError(errorObj);
+          return throwError(() => err);
+        })
       )
       .subscribe({
         next: (response) => {},
@@ -89,6 +125,15 @@ export class TaskService {
           }
 
           return tasks;
+        }),
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+          this.loggingService.logError(errorObj);
+          return throwError(() => err);
         })
       );
   }
@@ -99,6 +144,17 @@ export class TaskService {
           id +
           '.json',
         data
+      )
+      .pipe(
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+          this.loggingService.logError(errorObj);
+          return throwError(() => err);
+        })
       )
       .subscribe({
         error: (err) => {
