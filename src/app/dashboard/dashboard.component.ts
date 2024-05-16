@@ -1,6 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Task } from '../Model/task';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { map } from 'rxjs';
 import { TaskService } from '../Services/task.service';
 
@@ -19,6 +23,7 @@ export class DashboardComponent implements OnInit {
 
   currentTaskId: string = '';
   isLoading: boolean = false;
+  errorMessage: string = '';
 
   taskService: TaskService = inject(TaskService);
   selectedTask: Task;
@@ -60,7 +65,20 @@ export class DashboardComponent implements OnInit {
         this.allTasks = tasks;
         this.isLoading = false;
       },
+      error: (err) => {
+        this.setErrorMessage(err);
+        this.isLoading = false;
+        setTimeout(() => {
+          this.errorMessage = null;
+        }, 3000);
+      },
     });
+  }
+
+  private setErrorMessage(err: HttpErrorResponse) {
+    if (err.error.error === 'Permission denied') {
+      this.errorMessage = 'You do not have permission to perform this action';
+    }
   }
   deleteTask(id: string | undefined) {
     this.taskService.deleteTask(id);
