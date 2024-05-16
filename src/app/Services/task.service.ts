@@ -1,7 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Task } from '../Model/task';
-import { map } from 'rxjs';
+import { Subject, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +15,21 @@ export class TaskService {
 
   http: HttpClient = inject(HttpClient);
 
+  errorSubject = new Subject<HttpErrorResponse>();
+
   CreateTask(task: Task) {
     const headers = new HttpHeaders({ myheader: 'hello-world' });
     this.http
       .post<{ name: string }>(
-        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json',
+        'https://angularhttpclient-dfddsd1cb37-default-rtdb.firebaseio.com/tasks.json',
         task,
         { headers: headers }
       )
-      .subscribe((response) => {});
+      .subscribe({
+        error: (err) => {
+          this.errorSubject.next(err);
+        },
+      });
   }
 
   deleteTask(id: string | undefined) {
@@ -31,8 +41,8 @@ export class TaskService {
       )
       .subscribe({
         next: (response) => {},
-        error(err: any) {
-          alert(err.message);
+        error: (err) => {
+          this.errorSubject.next(err);
         },
         complete() {
           alert(
@@ -49,6 +59,9 @@ export class TaskService {
       )
       .subscribe({
         next: (response) => {},
+        error: (err) => {
+          this.errorSubject.next(err);
+        },
         complete() {
           alert(
             'All records are deleted...! Please click on FetchTask button to see updated Tasks List'
@@ -87,6 +100,10 @@ export class TaskService {
           '.json',
         data
       )
-      .subscribe();
+      .subscribe({
+        error: (err) => {
+          this.errorSubject.next(err);
+        },
+      });
   }
 }
