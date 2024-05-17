@@ -1,0 +1,51 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+.details-container {
+  width: 45%;
+  height: 40%;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 30%;
+  background-color: white;
+}
+
+.details-header {
+  padding: 20px 15px;
+  display: flex;
+}
+.details-header .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+hr {
+  border: 2px solid black;
+  margin: 0px 15px;
+}
+.details-body {
+  margin: 40px 20px;
+  padding: 0px 10px;
+}
+/* .detail-desc {
+}
+.desc-text {
+} */
+.detail-info {
+  display: flex;
+}
+
+.detail-info span {
+  width: 50%;
+}

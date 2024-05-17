@@ -36,6 +36,7 @@ export class CreateTaskComponent implements AfterViewInit {
   EmitTaskData: EventEmitter<Task> = new EventEmitter<Task>();
 
   ngAfterViewInit() {
+    // console.log(this.selectedTask);
     setTimeout(() => {
       this.taskForm.form.patchValue(this.selectedTask);
     }, 0);

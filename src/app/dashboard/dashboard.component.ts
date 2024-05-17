@@ -47,9 +47,9 @@ export class DashboardComponent implements OnInit {
     this.editMode = false;
     this.selectedTask = {
       title: '',
-      desc: '',
+      description: '',
       assignedTo: '',
-      createdAt: '',
+      createAt: '',
       priority: '',
       status: '',
     };
@@ -111,5 +111,20 @@ export class DashboardComponent implements OnInit {
     this.selectedTask = this.allTasks.find((task) => {
       return task.id === id;
     });
+  }
+
+  infoClicked: boolean = false;
+
+  currentTask: Task | null = null;
+  onInfoClicked(taskID: string | undefined) {
+    this.infoClicked = true;
+    this.taskService.getTaskDetails(taskID).subscribe({
+      next: (data: Task) => {
+        this.currentTask = data;
+      },
+    });
+  }
+  infoClosed(action) {
+    this.infoClicked = action;
   }
 }

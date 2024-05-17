@@ -162,4 +162,20 @@ export class TaskService {
         },
       });
   }
+
+  getTaskDetails(id: string | undefined) {
+    return this.http
+      .get(
+        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks/' +
+          id +
+          '.json'
+      )
+      .pipe(
+        map((response) => {
+          let task = {};
+          task = { ...response, id: id };
+          return task;
+        })
+      );
+  }
 }

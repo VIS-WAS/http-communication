@@ -1,1 +1,24 @@
-<p>task-details works!</p>
+<div class="overlay"></div>
+<div class="details-container">
+  <div class="details-header">
+    <h3>{{ currentTask?.title }}</h3>
+    <a class="close" href="#" (click)="onCloseDetail()">&times;</a>
+  </div>
+  <hr />
+
+  <div class="details-body">
+    <div class="detail-desc">
+      <h3>Description</h3>
+      <div class="desc-text">
+        <p>{{ currentTask?.description }}</p>
+      </div>
+    </div>
+
+    <div class="detail-info">
+      <span> <b>assigned To :</b> {{ currentTask?.assignedTo }} </span>
+      <span> <b>Created At :</b>{{ currentTask?.createAt }} </span>
+      <span> <b>Priority:</b> {{ currentTask?.priority }} </span>
+      <span> <b>Current Status :</b> {{ currentTask?.status }} </span>
+    </div>
+  </div>
+</div>
