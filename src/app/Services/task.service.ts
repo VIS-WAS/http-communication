@@ -108,9 +108,14 @@ export class TaskService {
   getAllTasks() {
     //instead of subscribing to MAP observable here, we are going to subscribe in the component class.
     //So return this observable as below
+    let header = new HttpHeaders();
+    header = header.append('content-type', 'application/json');
+    header = header.append('content-type', 'text/html');
+
     return this.http
       .get<{ [key: string]: Task }>(
-        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json'
+        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json',
+        { headers: header }
       )
       .pipe(
         map((response) => {
