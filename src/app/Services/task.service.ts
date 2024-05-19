@@ -137,7 +137,7 @@ export class TaskService {
         map((response) => {
           //TRANSFORM DATA
 
-          console.log(response);
+          // console.log(response);
           let tasks = [];
           for (let key in response) {
             if (response.hasOwnProperty(key)) {
