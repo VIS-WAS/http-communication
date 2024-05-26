@@ -1,6 +1,6 @@
 <div class="login-container">
   <div class="login-header">
-    <h2>Login Here</h2>
+    <h2>{{ isLoginMode ? "Login" : "Sign up " }}</h2>
   </div>
 
   <div class="login-details">
@@ -11,10 +11,20 @@
       <label for="userpassword">Password</label>
       <input type="password" name="password" id="userpassword" />
 
-      <button type="submit">Login</button>
+      <button type="submit">{{ isLoginMode ? "Login" : "Register" }}</button>
 
       <div class="signup">
-        <span>Do not have an accont yet? <a href="">Register Here</a></span>
+        <span>
+          {{
+            isLoginMode
+              ? "Do not have an accont yet?"
+              : "Already have an account ?"
+          }}
+
+          <button type="button" (click)="onSwitchMode()">
+            {{ isLoginMode ? "Register here" : "Login here" }}
+          </button></span
+        >
       </div>
     </form>
   </div>

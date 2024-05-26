@@ -17,6 +17,8 @@ input {
   border: none;
   background-color: rgb(209, 233, 253);
   border-radius: 5px;
+  font-size: 18px;
+  padding: 15px;
 }
 button {
   width: 100%;
@@ -28,6 +30,16 @@ button {
 }
 .signup {
   margin-top: 20px;
+}
+.signup button {
+  padding-right: 25px;
+  display: inline;
+  background-color: white;
+  width: 150px;
+  height: 20px;
+  color: blue;
+  border: none;
+  font-size: 18px;
 }
 a {
   text-decoration: none;
