@@ -4,14 +4,30 @@
   </div>
 
   <div class="login-details">
-    <form action="">
+    <form (ngSubmit)="formSubmitted(authForm)" #authForm="ngForm">
       <label for="useremail">Email Address</label>
-      <input type="email" name="email" id="useremail" />
+      <input
+        type="email"
+        name="useremail"
+        id="useremail"
+        ngModel
+        required
+        email
+      />
 
       <label for="userpassword">Password</label>
-      <input type="password" name="password" id="userpassword" />
+      <input
+        type="password"
+        name="userpassword"
+        id="userpassword"
+        ngModel
+        required
+        minlength="8"
+      />
 
-      <button type="submit">{{ isLoginMode ? "Login" : "Register" }}</button>
+      <button type="submit" [disabled]="authForm.invalid">
+        {{ isLoginMode ? "Login" : "Register" }}
+      </button>
 
       <div class="signup">
         <span>
