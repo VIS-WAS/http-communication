@@ -1,0 +1,23 @@
+.home-container {
+  margin: 70px;
+  width: 60%;
+}
+.home-header {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.home-container > hr {
+  border: 5px solid rgb(219, 224, 176);
+}
+
+.home-body {
+  padding-top: 40px;
+}
+.home-para {
+  font-size: 20px;
+  padding-top: 15px;
+}
+.list {
+  margin-left: 30px;
+}

@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptorService } from './Services/auth-interceptor.service';
 import { LoggingInterceptorService } from './Services/logging-interceptor.service';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { LoggingInterceptorService } from './Services/logging-interceptor.servic
     DashboardComponent,
     CreateTaskComponent,
     TaskDetailsComponent,
+    HomeComponent,
+    LoginComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [

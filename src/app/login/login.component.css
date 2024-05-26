@@ -1,0 +1,34 @@
+.login-container {
+  position: relative;
+  width: 450px;
+  margin: 70px 650px;
+  border: none;
+  border-radius: 8px;
+  padding: 25px;
+  height: 350px;
+  box-shadow: 1px 1px 20px 5px rgb(181, 215, 212);
+}
+.login-header {
+  font-size: 20px;
+}
+input {
+  width: 100%;
+  height: 40px;
+  border: none;
+  background-color: rgb(209, 233, 253);
+  border-radius: 5px;
+}
+button {
+  width: 100%;
+  height: 40px;
+  margin-top: 20px;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+}
+.signup {
+  margin-top: 20px;
+}
+a {
+  text-decoration: none;
+}
