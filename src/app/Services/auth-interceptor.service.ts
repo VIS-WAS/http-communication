@@ -12,15 +12,13 @@ export class AuthInterceptorService implements HttpInterceptor {
   constructor() {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    console.log('Auth interceptor is called');
-    const modifiedReq = req.clone({
-      headers: req.headers.append('auth', 'abcxyz'),
-    });
+    // console.log('Auth interceptor is called');
+    const modifiedReq = req.clone();
     return next.handle(modifiedReq).pipe(
       tap((event) => {
         if (event.type === HttpEventType.Sent) {
-          console.log('Response has arrived');
-          console.log(event);
+          // console.log('Response has arrived');
+          // console.log(event);
         }
       })
     );
