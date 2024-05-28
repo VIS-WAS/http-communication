@@ -18,26 +18,45 @@ export class AuthService {
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCHt5WwI5Q0EgqOHGidOOYdrTJF7BlFWEs',
         data
       )
-      .pipe(
-        catchError((err) => {
-          let errorMessage = 'An unknown error has occured';
-          if (!err.error || !err.error.error) {
-            return throwError(() => errorMessage);
-          }
-          switch (err.error.error.message) {
-            case 'EMAIL_EXISTS':
-              errorMessage =
-                'The email address is already in use by another account.';
-              break;
-            case 'OPERATION_NOT_ALLOWED':
-              errorMessage = 'Password sign-in is disabled for this project.';
-              break;
-            case 'TOO_MANY_ATTEMPTS_TRY_LATER':
-              errorMessage =
-                'We have blocked all requests from this device due to unusual activity. Try again later.';
-          }
-          return throwError(() => errorMessage);
-        })
-      );
+      .pipe(catchError(this.handleError));
+  }
+
+  login(email, password) {
+    const data = { email: email, password: password, returnSecureToken: true };
+    return this.http
+      .post<AuthResponse>(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCHt5WwI5Q0EgqOHGidOOYdrTJF7BlFWEs',
+        data
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(err) {
+    console.log(err.error.error.message);
+    let errorMessage = 'An unknown error has occured';
+    if (!err.error || !err.error.error) {
+      return throwError(() => errorMessage);
+    }
+    switch (err.error.error.message) {
+      case 'EMAIL_EXISTS':
+        errorMessage =
+          'The email address is already in use by another account.';
+        break;
+      case 'OPERATION_NOT_ALLOWED':
+        errorMessage = 'Password sign-in is disabled for this project.';
+        break;
+      case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+        errorMessage =
+          'We have blocked all requests from this device due to unusual activity. Try again later.';
+        break;
+      case 'INVALID_LOGIN_CREDENTIALS':
+        errorMessage = 'The username or password does not exists';
+        break;
+      case 'USER_DISABLED':
+        errorMessage =
+          'The user account has been disabled by an administrator.';
+        break;
+    }
+    return throwError(() => errorMessage);
   }
 }

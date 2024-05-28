@@ -1,6 +1,8 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../Services/auth.service';
+import { Observable } from 'rxjs';
+import { AuthResponse } from '../Model/AuthResponse';
 
 @Component({
   selector: 'app-login',
@@ -15,28 +17,36 @@ export class LoginComponent {
   authService: AuthService = inject(AuthService);
   errorMessage: string | null = null;
 
+  authObs: Observable<AuthResponse>;
+
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
   }
   formSubmitted(form: NgForm) {
+    this.isLoading = true;
     if (this.isLoginMode) {
-      return;
+      this.authObs = this.authService.login(
+        form.value.useremail,
+        form.value.userpassword
+      );
     } else {
       this.isLoading = true;
-      this.authService
-        .signUp(form.value.useremail, form.value.userpassword)
-        .subscribe({
-          next: (res) => {
-            console.log(res);
-            this.isLoading = false;
-          },
-          error: (errMSG) => {
-            this.isLoading = false;
-            this.errorMessage = errMSG;
-            this.hideSnackbar();
-          },
-        });
+      this.authObs = this.authService.signUp(
+        form.value.useremail,
+        form.value.userpassword
+      );
     }
+    this.authObs.subscribe({
+      next: (res) => {
+        console.log(res);
+        this.isLoading = false;
+      },
+      error: (errMSG) => {
+        this.isLoading = false;
+        this.errorMessage = errMSG;
+        this.hideSnackbar();
+      },
+    });
     form.reset();
   }
 
