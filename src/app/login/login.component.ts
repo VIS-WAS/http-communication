@@ -10,7 +10,10 @@ import { AuthService } from '../Services/auth.service';
 export class LoginComponent {
   isLoginMode: boolean = true;
 
+  isLoading: boolean = false;
+
   authService: AuthService = inject(AuthService);
+  errorMessage: string | null = null;
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -19,17 +22,27 @@ export class LoginComponent {
     if (this.isLoginMode) {
       return;
     } else {
+      this.isLoading = true;
       this.authService
         .signUp(form.value.useremail, form.value.userpassword)
         .subscribe({
           next: (res) => {
             console.log(res);
+            this.isLoading = false;
           },
-          error: (err) => {
-            console.log(err);
+          error: (errMSG) => {
+            this.isLoading = false;
+            this.errorMessage = errMSG;
+            this.hideSnackbar();
           },
         });
     }
     form.reset();
+  }
+
+  hideSnackbar() {
+    setTimeout(() => {
+      this.errorMessage = null;
+    }, 3000);
   }
 }

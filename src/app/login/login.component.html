@@ -1,10 +1,18 @@
 <div class="login-container">
+  <app-snackbar
+    [errorMessage]="errorMessage"
+    *ngIf="errorMessage"
+  ></app-snackbar>
   <div class="login-header">
     <h2>{{ isLoginMode ? "Login" : "Sign up " }}</h2>
   </div>
-
+  <app-loader *ngIf="isLoading"></app-loader>
   <div class="login-details">
-    <form (ngSubmit)="formSubmitted(authForm)" #authForm="ngForm">
+    <form
+      (ngSubmit)="formSubmitted(authForm)"
+      #authForm="ngForm"
+      *ngIf="!isLoading"
+    >
       <label for="useremail">Email Address</label>
       <input
         type="email"

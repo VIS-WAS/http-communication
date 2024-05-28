@@ -33,10 +33,11 @@
   <hr />
 
   <div class="dashboard-item-container">
-    <div class="sb sb-error" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
-    <div class="loader" *ngIf="isLoading"></div>
+    <app-snackbar
+      [errorMessage]="errorMessage"
+      *ngIf="errorMessage"
+    ></app-snackbar>
+    <app-loader *ngIf="isLoading"></app-loader>
     <div
       style="padding-left: 40%; text-align: right"
       *ngIf="allTasks.length < 1"
