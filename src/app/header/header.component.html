@@ -5,7 +5,8 @@
 
   <div class="header-nav">
     <a [routerLink]="'home'">HOME</a>
-    <a [routerLink]="'/dashboard'">DASHBOARD</a
-    ><a [routerLink]="'login'">LOGIN</a>
+    <a *ngIf="isLoggedIn" [routerLink]="'/dashboard'">DASHBOARD</a
+    ><a *ngIf="!isLoggedIn" [routerLink]="'login'">LOGIN</a>
+    <a *ngIf="isLoggedIn">LOGOUT</a>
   </div>
 </header>
