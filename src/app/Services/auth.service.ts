@@ -1,13 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { AuthResponse } from '../Model/AuthResponse';
-import { catchError, throwError } from 'rxjs';
+import { Subject, catchError, tap, throwError } from 'rxjs';
+import { User } from '../Model/User';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   http: HttpClient = inject(HttpClient);
+
+  user = new Subject<User>();
 
   constructor() {}
 
@@ -18,7 +21,12 @@ export class AuthService {
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCHt5WwI5Q0EgqOHGidOOYdrTJF7BlFWEs',
         data
       )
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap((res) => {
+          this.handleCreateUser(res);
+        })
+      );
   }
 
   login(email, password) {
@@ -28,7 +36,12 @@ export class AuthService {
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCHt5WwI5Q0EgqOHGidOOYdrTJF7BlFWEs',
         data
       )
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap((res) => {
+          this.handleCreateUser(res);
+        })
+      );
   }
 
   private handleError(err) {
@@ -58,5 +71,12 @@ export class AuthService {
         break;
     }
     return throwError(() => errorMessage);
+  }
+
+  private handleCreateUser(res) {
+    const expiresInTS = new Date().getTime() + +res.expiresIn * 1000;
+    const expiresIn = new Date(expiresInTS);
+    const user = new User(res.email, res.localId, res.idToken, expiresIn);
+    this.user.next(user);
   }
 }
