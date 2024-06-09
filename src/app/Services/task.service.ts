@@ -7,8 +7,17 @@ import {
 } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Task } from '../Model/task';
-import { Subject, catchError, map, tap, throwError } from 'rxjs';
+import {
+  Subject,
+  catchError,
+  exhaustMap,
+  map,
+  take,
+  tap,
+  throwError,
+} from 'rxjs';
 import { LoggingService } from './logging.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +30,7 @@ export class TaskService {
   errorSubject = new Subject<HttpErrorResponse>();
 
   loggingService: LoggingService = inject(LoggingService);
+  authService: AuthService = inject(AuthService);
 
   CreateTask(task: Task) {
     const headers = new HttpHeaders({ myheader: 'hello-world' });
@@ -115,49 +125,41 @@ export class TaskService {
       });
   }
   getAllTasks() {
+    return this.authService.user.pipe(
+      take(1),
+      exhaustMap((user) => {
+        return this.http.get<{ [key: string]: Task }>(
+          'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json',
+          { params: new HttpParams().set('auth', user.token) }
+        );
+      }),
+      map((response) => {
+        //TRANSFORM DATA
+
+        // console.log(response);
+        let tasks = [];
+        for (let key in response) {
+          if (response.hasOwnProperty(key)) {
+            // to make sure only actual property is going to add
+            tasks.push({ ...response[key], id: key });
+          }
+        }
+
+        return tasks;
+      }),
+      catchError((err) => {
+        const errorObj = {
+          statusCode: err.status,
+          errorMessage: err.message,
+          dateTime: new Date(),
+        };
+        this.loggingService.logError(errorObj);
+        return throwError(() => err);
+      })
+    );
+
     //instead of subscribing to MAP observable here, we are going to subscribe in the component class.
     //So return this observable as below
-    let header = new HttpHeaders();
-    header = header.append('content-type', 'application/json');
-    header = header.append('content-type', 'text/html');
-
-    let queryParams = new HttpParams();
-
-    queryParams = queryParams.set('page', 2);
-    queryParams = queryParams.set('items', 10);
-    return this.http
-      .get<{ [key: string]: Task }>(
-        // method to pass query string
-        // 'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json?page =2&item=10',
-        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json',
-
-        { headers: header, params: queryParams, observe: 'body' }
-      )
-      .pipe(
-        map((response) => {
-          //TRANSFORM DATA
-
-          // console.log(response);
-          let tasks = [];
-          for (let key in response) {
-            if (response.hasOwnProperty(key)) {
-              // to make sure only actual property is going to add
-              tasks.push({ ...response[key], id: key });
-            }
-          }
-
-          return tasks;
-        }),
-        catchError((err) => {
-          const errorObj = {
-            statusCode: err.status,
-            errorMessage: err.message,
-            dateTime: new Date(),
-          };
-          this.loggingService.logError(errorObj);
-          return throwError(() => err);
-        })
-      );
   }
   updateTask(id: string | undefined, data: Task) {
     this.http
