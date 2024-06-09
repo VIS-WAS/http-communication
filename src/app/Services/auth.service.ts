@@ -1,7 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { AuthResponse } from '../Model/AuthResponse';
-import { BehaviorSubject, Subject, catchError, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subject,
+  catchError,
+  retry,
+  tap,
+  throwError,
+} from 'rxjs';
 import { User } from '../Model/User';
 import { Router } from '@angular/router';
 
@@ -86,5 +93,24 @@ export class AuthService {
     const expiresIn = new Date(expiresInTS);
     const user = new User(res.email, res.localId, res.idToken, expiresIn);
     this.user.next(user);
+
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  autoLogin() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      return;
+    }
+    const loggedUser = new User(
+      user.email,
+      user.id,
+      user._token,
+      user._expiresIn
+    );
+
+    if (loggedUser.token) {
+      this.user.next(loggedUser);
+    }
   }
 }
