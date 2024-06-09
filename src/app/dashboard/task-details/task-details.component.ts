@@ -14,12 +14,6 @@ export class TaskDetailsComponent {
   @Input()
   currentTask: Task | null = null;
 
-  taskService: TaskService = inject(TaskService);
-
-  ngAfterViewInit() {
-    console.log(this.currentTask);
-    // this.taskService.getTaskDetails().subscribe();
-  }
   onCloseDetail() {
     this.CloseDetailView.emit(false);
   }

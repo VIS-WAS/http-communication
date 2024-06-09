@@ -125,38 +125,35 @@ export class TaskService {
       });
   }
   getAllTasks() {
-    return this.authService.user.pipe(
-      take(1),
-      exhaustMap((user) => {
-        return this.http.get<{ [key: string]: Task }>(
-          'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json',
-          { params: new HttpParams().set('auth', user.token) }
-        );
-      }),
-      map((response) => {
-        //TRANSFORM DATA
+    return this.http
+      .get(
+        'https://angularhttpclient-1cb37-default-rtdb.firebaseio.com/tasks.json'
+      )
+      .pipe(
+        map((response) => {
+          //TRANSFORM DATA
 
-        // console.log(response);
-        let tasks = [];
-        for (let key in response) {
-          if (response.hasOwnProperty(key)) {
-            // to make sure only actual property is going to add
-            tasks.push({ ...response[key], id: key });
+          // console.log(response);
+          let tasks = [];
+          for (let key in response) {
+            if (response.hasOwnProperty(key)) {
+              // to make sure only actual property is going to add
+              tasks.push({ ...response[key], id: key });
+            }
           }
-        }
 
-        return tasks;
-      }),
-      catchError((err) => {
-        const errorObj = {
-          statusCode: err.status,
-          errorMessage: err.message,
-          dateTime: new Date(),
-        };
-        this.loggingService.logError(errorObj);
-        return throwError(() => err);
-      })
-    );
+          return tasks;
+        }),
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+          this.loggingService.logError(errorObj);
+          return throwError(() => err);
+        })
+      );
 
     //instead of subscribing to MAP observable here, we are going to subscribe in the component class.
     //So return this observable as below

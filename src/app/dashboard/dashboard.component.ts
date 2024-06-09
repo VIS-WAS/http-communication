@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit {
       },
     });
   }
-  infoClosed(action) {
-    this.infoClicked = action;
+  infoClosed() {
+    this.infoClicked = false;
   }
 }

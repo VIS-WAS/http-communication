@@ -1,7 +1,9 @@
 <div class="overlay">
   <div class="popup">
     <h2>{{ isEditMode ? "Update Task" : "Create New Task" }}</h2>
-    <a class="close" href="#" (click)="OnCloseForm()">&times;</a>
+    <a class="close" [routerLink]="'/dashboard'" (click)="OnCloseForm()"
+      >&times;</a
+    >
     <div class="content">
       <section class="container">
         <form
