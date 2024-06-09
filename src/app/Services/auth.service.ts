@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { AuthResponse } from '../Model/AuthResponse';
 import { BehaviorSubject, Subject, catchError, tap, throwError } from 'rxjs';
 import { User } from '../Model/User';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,8 @@ export class AuthService {
   http: HttpClient = inject(HttpClient);
 
   user = new BehaviorSubject<User>(null);
+
+  router: Router = inject(Router);
 
   constructor() {}
 
@@ -71,6 +74,11 @@ export class AuthService {
         break;
     }
     return throwError(() => errorMessage);
+  }
+
+  logout() {
+    this.user.next(null);
+    this.router.navigate(['/login']);
   }
 
   private handleCreateUser(res) {
